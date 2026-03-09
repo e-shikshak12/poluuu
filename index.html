@@ -6,27 +6,71 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
 body{
 margin:0;
-font-family:sans-serif;
-background:linear-gradient(135deg,#ff4e8a,#ff9ecb);
 height:100vh;
+overflow:hidden;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
-color:white;
 }
+
+/* animated gradient */
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(270deg,#ff4e8a,#ff9ecb,#ff4e8a);
+background-size:600% 600%;
+animation:bgmove 15s ease infinite;
+z-index:-2;
+}
+
+@keyframes bgmove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+/* floating hearts */
+
+.heart{
+position:absolute;
+font-size:18px;
+opacity:0.6;
+animation:float 10s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh)}
+100%{transform:translateY(-10vh)}
+}
+
+/* container */
 
 #app{
 width:380px;
-height:600px;
+height:640px;
+backdrop-filter:blur(20px);
 background:rgba(255,255,255,0.15);
-backdrop-filter:blur(15px);
 border-radius:20px;
 padding:15px;
 display:flex;
 flex-direction:column;
+box-shadow:0 20px 40px rgba(0,0,0,0.3);
 }
+
+/* titles */
 
 h2{
 text-align:center;
@@ -38,25 +82,33 @@ margin:5px;
 #messages{
 flex:1;
 overflow-y:auto;
+padding:5px;
 }
 
 .msg{
 background:rgba(255,255,255,0.3);
-margin:6px;
 padding:8px;
+margin:6px 0;
 border-radius:10px;
+animation:fade 0.4s;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1}
 }
 
 img{
-max-width:120px;
+max-width:130px;
 border-radius:10px;
 }
 
-/* input */
+/* controls */
 
-#chatControls{
+#controls{
 display:flex;
 gap:5px;
+margin-top:5px;
 }
 
 input{
@@ -73,32 +125,48 @@ border-radius:8px;
 background:#ff2f73;
 color:white;
 cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.1);
+}
+
+/* emojis */
+
+#emojis{
+margin-top:4px;
 }
 
 /* game */
 
 #game{
-margin-top:10px;
+margin-top:8px;
 text-align:center;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:5px;
+gap:6px;
 margin-top:10px;
 }
 
 .cell{
-height:60px;
+height:65px;
 background:white;
 color:black;
 font-size:28px;
 display:flex;
 align-items:center;
 justify-content:center;
-cursor:pointer;
 border-radius:8px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.cell:hover{
+transform:scale(1.1);
 }
 
 </style>
@@ -109,33 +177,34 @@ border-radius:8px;
 <div id="app">
 
 <div id="login">
-<h2>💖 Enter Love Passcode</h2>
-<input id="pass" placeholder="Passcode">
+<h2>💖 Enter Password</h2>
+<input id="pass">
 <button onclick="enter()">Enter</button>
 </div>
 
 <div id="main" style="display:none">
 
-<h2>Our Love Chat</h2>
+<h2>Love Chat 💬</h2>
 
 <div id="messages"></div>
 
-<div id="chatControls">
+<div id="controls">
 <input id="msgInput">
 <button onclick="sendMsg()">Send</button>
-<input type="file" id="photo" onchange="sendPhoto()" style="width:80px">
+<input type="file" id="photo" onchange="sendPhoto()" style="width:90px">
 </div>
 
-<div>
-<button onclick="addEmoji('❤️')">❤️</button>
-<button onclick="addEmoji('😘')">😘</button>
-<button onclick="addEmoji('😍')">😍</button>
-<button onclick="addEmoji('🥰')">🥰</button>
+<div id="emojis">
+<button onclick="emoji('❤️')">❤️</button>
+<button onclick="emoji('😘')">😘</button>
+<button onclick="emoji('😍')">😍</button>
+<button onclick="emoji('🥰')">🥰</button>
+<button onclick="emoji('😂')">😂</button>
 </div>
 
 <div id="game">
 
-<h2>Tic Tac Toe</h2>
+<h2>Tic-Tac-Toe</h2>
 
 <button onclick="ready()">Ready</button>
 <div id="status"></div>
@@ -150,59 +219,77 @@ border-radius:8px;
 
 </div>
 
+<script>
+
+/* floating hearts */
+
+for(let i=0;i<25;i++){
+
+let h=document.createElement("div")
+h.className="heart"
+h.innerHTML="❤️"
+h.style.left=Math.random()*100+"vw"
+h.style.animationDuration=(6+Math.random()*6)+"s"
+document.body.appendChild(h)
+
+}
+
+</script>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, set, onValue } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
 
-const firebaseConfig = {
+const firebaseConfig={
 
 apiKey:"AIzaSyB_17-XmHxGmGQc_lHuTHoHAK8oVIxJ6W0",
 authDomain:"my-poluuuu.firebaseapp.com",
 databaseURL:"https://my-poluuuu-default-rtdb.asia-southeast1.firebasedatabase.app",
 projectId:"my-poluuuu"
 
-};
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const app=initializeApp(firebaseConfig)
+const db=getDatabase(app)
 
-const chatRef = ref(db,"chat/messages");
-const gameRef = ref(db,"game");
+const chatRef=ref(db,"chat/messages")
+const boardRef=ref(db,"game/board")
 
-let player="";
-let board=["","","","","","","","",""];
+let player=""
+let board=["","","","","","","","",""]
 
-function enter(){
+window.enter=function(){
 
-if(document.getElementById("pass").value==="1234"){
+if(document.getElementById("pass").value==="2412"){
 
-document.getElementById("login").style.display="none"
-document.getElementById("main").style.display="flex"
+login.style.display="none"
+main.style.display="flex"
+
+}else alert("Wrong password")
 
 }
 
-}
-
-/* CHAT */
+/* chat */
 
 window.sendMsg=function(){
 
-let text=document.getElementById("msgInput").value
+let t=msgInput.value
 
-push(chatRef,{type:"text",text})
+if(!t) return
 
-document.getElementById("msgInput").value=""
+push(chatRef,{type:"text",text:t})
+
+msgInput.value=""
 
 }
 
 window.sendPhoto=function(){
 
-let file=document.getElementById("photo").files[0]
-
+let file=photo.files[0]
 let reader=new FileReader()
 
-reader.onload=function(){
+reader.onload=()=>{
 
 push(chatRef,{type:"img",url:reader.result})
 
@@ -212,36 +299,33 @@ reader.readAsDataURL(file)
 
 }
 
-window.addEmoji=function(e){
+window.emoji=function(e){
 
-document.getElementById("msgInput").value+=e
+msgInput.value+=e
 
 }
 
-onChildAdded(chatRef,(d)=>{
+onChildAdded(chatRef,d=>{
 
-let data=d.val()
-
+let m=d.val()
 let div=document.createElement("div")
 div.className="msg"
 
-if(data.type==="text") div.innerText=data.text
+if(m.type==="text") div.innerText=m.text
 
-if(data.type==="img"){
+if(m.type==="img"){
 
 let img=document.createElement("img")
-img.src=data.url
+img.src=m.url
 div.appendChild(img)
 
 }
 
-document.getElementById("messages").appendChild(div)
+messages.appendChild(div)
 
 })
 
-/* GAME */
-
-let boardDiv=document.getElementById("board")
+/* game */
 
 for(let i=0;i<9;i++){
 
@@ -250,51 +334,36 @@ cell.className="cell"
 
 cell.onclick=()=>move(i)
 
-boardDiv.appendChild(cell)
+board.appendChild
+
+document.getElementById("board").appendChild(cell)
 
 }
 
 window.ready=function(){
 
-set(ref(db,"game/ready/"+Math.random()),true)
-
-}
-
-onValue(ref(db,"game/ready"),(snap)=>{
-
-if(snap.exists()){
-
-let count=Object.keys(snap.val()).length
-
-if(count>=2){
-
-document.getElementById("status").innerText="Game started"
-
 player=Math.random()>0.5?"X":"O"
+status.innerText="You are "+player
 
 }
-
-}
-
-})
 
 function move(i){
 
-if(board[i]!=="" || player==="") return
+if(board[i]!==""||player==="") return
 
 board[i]=player
 
-set(ref(db,"game/board"),board)
+set(boardRef,board)
 
 check()
 
 }
 
-onValue(ref(db,"game/board"),(snap)=>{
+onValue(boardRef,s=>{
 
-if(!snap.exists()) return
+if(!s.exists()) return
 
-board=snap.val()
+board=s.val()
 
 let cells=document.querySelectorAll(".cell")
 
@@ -304,19 +373,15 @@ cells.forEach((c,i)=>c.innerText=board[i])
 
 function check(){
 
-let wins=[
-[0,1,2],[3,4,5],[6,7,8],
-[0,3,6],[1,4,7],[2,5,8],
-[0,4,8],[2,4,6]
-]
+let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
 
-for(let w of wins){
+for(let a of w){
 
-let [a,b,c]=w
+let[b,c,d]=a
 
-if(board[a] && board[a]==board[b] && board[a]==board[c]){
+if(board[b]&&board[b]==board[c]&&board[b]==board[d]){
 
-alert(board[a]+" wins ❤️")
+alert(board[b]+" wins ❤️")
 
 }
 
@@ -328,7 +393,7 @@ window.resetGame=function(){
 
 board=["","","","","","","","",""]
 
-set(ref(db,"game/board"),board)
+set(boardRef,board)
 
 }
 
