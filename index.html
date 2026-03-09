@@ -2,127 +2,107 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Lokesh ❤️ GF</title>
+<title>Our Love Chat ❤️</title>
 
 <style>
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
-
 body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
 height:100vh;
-overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#ff758c,#ff7eb3,#ffb199);
-}
-
-/* floating hearts background */
-
-.hearts{
-position:absolute;
-width:100%;
-height:100%;
+background:linear-gradient(135deg,#ff4e8a,#ff9ecb,#ffdde1);
 overflow:hidden;
-z-index:0;
 }
+
+/* floating hearts */
 
 .heart{
 position:absolute;
 color:white;
-animation:float 10s linear infinite;
+font-size:20px;
+animation:float 10s infinite;
 opacity:0.7;
 }
 
 @keyframes float{
-0%{transform:translateY(100vh);opacity:0}
-50%{opacity:1}
-100%{transform:translateY(-10vh);opacity:0}
+0%{transform:translateY(100vh);}
+100%{transform:translateY(-10vh);}
 }
 
-/* glass UI */
+/* chat container */
 
-.card{
-z-index:2;
-background:rgba(255,255,255,0.15);
-backdrop-filter:blur(15px);
-border-radius:25px;
-padding:30px;
+#app{
 width:360px;
-text-align:center;
+height:520px;
+backdrop-filter:blur(15px);
+background:rgba(255,255,255,0.15);
+border-radius:20px;
+box-shadow:0 20px 50px rgba(0,0,0,0.3);
+display:flex;
+flex-direction:column;
+padding:20px;
 color:white;
-box-shadow:0 15px 40px rgba(0,0,0,0.3);
-animation:fade 1s ease;
 }
 
-@keyframes fade{
-from{opacity:0;transform:scale(.8)}
-to{opacity:1;transform:scale(1)}
+#title{
+text-align:center;
+font-size:22px;
+margin-bottom:10px;
+}
+
+/* messages */
+
+#messages{
+flex:1;
+overflow-y:auto;
+padding:10px;
+}
+
+.msg{
+background:rgba(255,255,255,0.3);
+margin:8px 0;
+padding:10px;
+border-radius:12px;
+backdrop-filter:blur(10px);
+animation:fadeIn 0.4s;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1;}
+}
+
+/* input area */
+
+#inputArea{
+display:flex;
+gap:10px;
 }
 
 input{
+flex:1;
 padding:10px;
-width:80%;
-border-radius:10px;
 border:none;
-margin:10px;
+border-radius:10px;
+outline:none;
 }
 
 button{
-padding:10px 20px;
+background:#ff4e8a;
 border:none;
-border-radius:10px;
-background:#ff4d6d;
 color:white;
+padding:10px 16px;
+border-radius:10px;
 cursor:pointer;
-margin:5px;
-transition:.3s;
+transition:0.3s;
 }
 
 button:hover{
 transform:scale(1.1);
-background:#ff1e56;
-}
-
-.menu button{
-display:block;
-width:200px;
-margin:10px auto;
-}
-
-.page{display:none}
-
-/* chat */
-
-#messages{
-height:150px;
-overflow:auto;
-background:rgba(255,255,255,0.2);
-border-radius:10px;
-padding:10px;
-margin-bottom:10px;
-text-align:left;
-}
-
-/* game */
-
-table{margin:auto}
-
-.cell{
-width:80px;
-height:80px;
-font-size:28px;
-background:white;
-color:black;
-border-radius:10px;
-}
-
-/* gallery */
-
-.gallery img{
-width:90px;
-border-radius:10px;
-margin:5px;
+background:#ff2f73;
 }
 
 </style>
@@ -130,290 +110,77 @@ margin:5px;
 
 <body>
 
-<div class="hearts"></div>
+<div id="app">
 
-<div class="card">
-
-<!-- LOGIN -->
-
-<div id="login">
-
-<h2>Our Love Space ❤️</h2>
-
-<input id="room" placeholder="Enter Love Code">
-
-<br>
-
-<button onclick="enter()">Enter</button>
-
-</div>
-
-
-<!-- HOME -->
-
-<div id="home" class="page">
-
-<h2>Lokesh ❤️ GF</h2>
-
-<div class="menu">
-
-<button onclick="openPage('chat')">💬 Chat</button>
-<button onclick="openPage('game')">🎮 Game</button>
-<button onclick="openPage('photos')">📷 Memories</button>
-<button onclick="openPage('music')">🎵 Music</button>
-
-</div>
-
-</div>
-
-
-<!-- CHAT -->
-
-<div id="chat" class="page">
-
-<h3>Love Chat 💬</h3>
+<div id="title">💖 Our Love Chat 💖</div>
 
 <div id="messages"></div>
 
-<input id="msg">
-
-<button onclick="send()">Send</button>
-
-<br>
-
-<button onclick="openPage('home')">Back</button>
-
-</div>
-
-
-<!-- GAME -->
-
-<div id="game" class="page">
-
-<h3>Tic Tac Toe</h3>
-
-<table>
-
-<tr>
-<td><button class="cell" onclick="play(0)"></button></td>
-<td><button class="cell" onclick="play(1)"></button></td>
-<td><button class="cell" onclick="play(2)"></button></td>
-</tr>
-
-<tr>
-<td><button class="cell" onclick="play(3)"></button></td>
-<td><button class="cell" onclick="play(4)"></button></td>
-<td><button class="cell" onclick="play(5)"></button></td>
-</tr>
-
-<tr>
-<td><button class="cell" onclick="play(6)"></button></td>
-<td><button class="cell" onclick="play(7)"></button></td>
-<td><button class="cell" onclick="play(8)"></button></td>
-</tr>
-
-</table>
-
-<br>
-
-<button onclick="resetGame()">Reset</button>
-
-<br>
-
-<button onclick="openPage('home')">Back</button>
-
-</div>
-
-
-<!-- PHOTOS -->
-
-<div id="photos" class="page">
-
-<h3>Our Memories 📷</h3>
-
-<div class="gallery">
-
-<img src="https://picsum.photos/100?1">
-<img src="https://picsum.photos/100?2">
-<img src="https://picsum.photos/100?3">
-
-</div>
-
-<button onclick="openPage('home')">Back</button>
-
-</div>
-
-
-<!-- MUSIC -->
-
-<div id="music" class="page">
-
-<h3>Our Song 🎵</h3>
-
-<audio controls>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
-</audio>
-
-<br>
-
-<button onclick="openPage('home')">Back</button>
-
+<div id="inputArea">
+<input id="msgInput" placeholder="Type something sweet...">
+<button onclick="sendMsg()">Send</button>
 </div>
 
 </div>
 
-
-
+<!-- floating hearts -->
 <script>
-
-/* floating hearts */
-
-for(let i=0;i<25;i++){
-
-let h=document.createElement("div")
-h.className="heart"
-h.innerHTML="❤️"
-h.style.left=Math.random()*100+"%"
-h.style.fontSize=15+Math.random()*25+"px"
-h.style.animationDuration=5+Math.random()*10+"s"
-
-document.querySelector(".hearts").appendChild(h)
-
+for(let i=0;i<20;i++){
+let heart=document.createElement("div")
+heart.className="heart"
+heart.innerHTML="❤"
+heart.style.left=Math.random()*100+"vw"
+heart.style.animationDuration=(5+Math.random()*5)+"s"
+document.body.appendChild(heart)
 }
-
-
-/* page navigation */
-
-function openPage(p){
-
-document.querySelectorAll(".page").forEach(e=>e.style.display="none")
-
-document.getElementById(p).style.display="block"
-
-}
-
-
-function enter(){
-
-let code=document.getElementById("room").value
-
-if(code.length>0){
-
-document.getElementById("login").style.display="none"
-
-document.getElementById("home").style.display="block"
-
-}
-
-}
-
 </script>
-
-
-
-<!-- FIREBASE -->
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, set }
-from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyB_17-XmHxGmGQc_lHuTHoHAK8oVIxJ6W0",
 authDomain: "my-poluuuu.firebaseapp.com",
-databaseURL: "https://my-poluuuu-default-rtdb.firebaseio.com/",
+databaseURL: "https://my-poluuuu-default-rtdb.asia-southeast1.firebasedatabase.app",
 projectId: "my-poluuuu",
 storageBucket: "my-poluuuu.firebasestorage.app",
 messagingSenderId: "1052824892709",
 appId: "1:1052824892709:web:7e4874adb805f9b5b456cc"
 };
 
-const app=initializeApp(firebaseConfig)
-const db=getDatabase(app)
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-let room="love-room"
+const chatRef = ref(db,"lovechat/messages");
 
+window.sendMsg=function(){
 
-/* chat */
+let input=document.getElementById("msgInput")
+let text=input.value
 
-window.send=function(){
+if(text==="") return
 
-let msg=document.getElementById("msg").value
-
-if(msg==="")return
-
-push(ref(db,"rooms/"+room+"/chat"),{
-text:msg
+push(chatRef,{
+message:text,
+time:Date.now()
 })
 
-document.getElementById("msg").value=""
-
+input.value=""
 }
 
+onChildAdded(chatRef,(data)=>{
 
-onValue(ref(db,"rooms/"+room+"/chat"),snap=>{
+let msg=data.val().message
 
-let box=document.getElementById("messages")
+let div=document.createElement("div")
+div.className="msg"
+div.innerText=msg
 
-box.innerHTML=""
-
-snap.forEach(d=>{
-box.innerHTML+="<p>"+d.val().text+"</p>"
-})
-
-})
-
-
-/* game */
-
-let board=["","","","","","","","",""]
-let turn="X"
-
-window.play=function(i){
-
-if(board[i]!="")return
-
-board[i]=turn
-
-turn=turn=="X"?"O":"X"
-
-set(ref(db,"rooms/"+room+"/game"),{
-board:board,
-turn:turn
-})
-
-}
-
-
-onValue(ref(db,"rooms/"+room+"/game"),snap=>{
-
-if(!snap.exists())return
-
-let data=snap.val()
-
-board=data.board
-
-turn=data.turn
-
-let cells=document.getElementsByClassName("cell")
-
-for(let i=0;i<9;i++)
-cells[i].innerText=board[i]
+document.getElementById("messages").appendChild(div)
 
 })
-
-
-window.resetGame=function(){
-
-board=["","","","","","","","",""]
-
-set(ref(db,"rooms/"+room+"/game"),{
-board:board,
-turn:"X"
-})
-
-}
 
 </script>
 
