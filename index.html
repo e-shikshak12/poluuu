@@ -1,197 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Lokesh ❤️ GF</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
 
 body{
 height:100vh;
+overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
-overflow:hidden;
-background:linear-gradient(120deg,#ff758c,#ff7eb3,#ffb199);
+background:linear-gradient(135deg,#ff758c,#ff7eb3,#ffb199);
 }
 
-/* floating hearts */
+/* floating hearts background */
 
 .hearts{
 position:absolute;
 width:100%;
 height:100%;
 overflow:hidden;
+z-index:0;
 }
 
 .heart{
 position:absolute;
 color:white;
-font-size:20px;
 animation:float 10s linear infinite;
 opacity:0.7;
 }
 
 @keyframes float{
-
-0%{
-transform:translateY(100vh);
-opacity:0;
+0%{transform:translateY(100vh);opacity:0}
+50%{opacity:1}
+100%{transform:translateY(-10vh);opacity:0}
 }
 
-50%{
-opacity:1;
-}
-
-100%{
-transform:translateY(-10vh);
-opacity:0;
-}
-
-}
-
-/* glass card */
+/* glass UI */
 
 .card{
-
-position:relative;
 z-index:2;
-
 background:rgba(255,255,255,0.15);
 backdrop-filter:blur(15px);
 border-radius:25px;
-
-padding:40px;
-width:350px;
-
-box-shadow:0 20px 50px rgba(0,0,0,0.3);
-
-color:white;
+padding:30px;
+width:360px;
 text-align:center;
-
-animation:fade 1.5s ease;
-
+color:white;
+box-shadow:0 15px 40px rgba(0,0,0,0.3);
+animation:fade 1s ease;
 }
 
 @keyframes fade{
-
-from{
-opacity:0;
-transform:scale(0.8);
-}
-
-to{
-opacity:1;
-transform:scale(1);
-}
-
+from{opacity:0;transform:scale(.8)}
+to{opacity:1;transform:scale(1)}
 }
 
 input{
-
-padding:12px;
+padding:10px;
 width:80%;
+border-radius:10px;
 border:none;
-border-radius:12px;
-
-margin-top:15px;
-
+margin:10px;
 }
 
 button{
-
-margin-top:15px;
-
-padding:12px 25px;
-
+padding:10px 20px;
 border:none;
-border-radius:12px;
-
+border-radius:10px;
 background:#ff4d6d;
-
 color:white;
-
-font-size:16px;
-
 cursor:pointer;
-
-transition:0.3s;
-
+margin:5px;
+transition:.3s;
 }
 
 button:hover{
-
 transform:scale(1.1);
 background:#ff1e56;
-
 }
 
-/* menu */
-
 .menu button{
-
 display:block;
 width:200px;
 margin:10px auto;
-
 }
 
-/* game board */
-
-table{
-margin:auto;
-margin-top:20px;
-}
-
-.cell{
-
-width:80px;
-height:80px;
-
-font-size:30px;
-
-border-radius:10px;
-
-background:white;
-
-color:black;
-
-transition:0.2s;
-
-}
-
-.cell:hover{
-
-background:#ffe5ec;
-
-}
+.page{display:none}
 
 /* chat */
 
 #messages{
-
 height:150px;
-
 overflow:auto;
-
 background:rgba(255,255,255,0.2);
-
 border-radius:10px;
-
 padding:10px;
-
 margin-bottom:10px;
-
+text-align:left;
 }
 
-.page{
-display:none;
+/* game */
+
+table{margin:auto}
+
+.cell{
+width:80px;
+height:80px;
+font-size:28px;
+background:white;
+color:black;
+border-radius:10px;
+}
+
+/* gallery */
+
+.gallery img{
+width:90px;
+border-radius:10px;
+margin:5px;
 }
 
 </style>
@@ -209,9 +140,7 @@ display:none;
 
 <h2>Our Love Space ❤️</h2>
 
-<p>Enter our secret code</p>
-
-<input id="room">
+<input id="room" placeholder="Enter Love Code">
 
 <br>
 
@@ -228,46 +157,12 @@ display:none;
 
 <div class="menu">
 
-<button onclick="openPage('game')">🎮 Play Game</button>
-
 <button onclick="openPage('chat')">💬 Chat</button>
+<button onclick="openPage('game')">🎮 Game</button>
+<button onclick="openPage('photos')">📷 Memories</button>
+<button onclick="openPage('music')">🎵 Music</button>
 
 </div>
-
-</div>
-
-
-<!-- GAME -->
-
-<div id="game" class="page">
-
-<h3>Tic Tac Toe</h3>
-
-<table>
-
-<tr>
-<td><button class="cell"></button></td>
-<td><button class="cell"></button></td>
-<td><button class="cell"></button></td>
-</tr>
-
-<tr>
-<td><button class="cell"></button></td>
-<td><button class="cell"></button></td>
-<td><button class="cell"></button></td>
-</tr>
-
-<tr>
-<td><button class="cell"></button></td>
-<td><button class="cell"></button></td>
-<td><button class="cell"></button></td>
-</tr>
-
-</table>
-
-<br>
-
-<button onclick="openPage('home')">Back</button>
 
 </div>
 
@@ -290,34 +185,104 @@ display:none;
 
 </div>
 
+
+<!-- GAME -->
+
+<div id="game" class="page">
+
+<h3>Tic Tac Toe</h3>
+
+<table>
+
+<tr>
+<td><button class="cell" onclick="play(0)"></button></td>
+<td><button class="cell" onclick="play(1)"></button></td>
+<td><button class="cell" onclick="play(2)"></button></td>
+</tr>
+
+<tr>
+<td><button class="cell" onclick="play(3)"></button></td>
+<td><button class="cell" onclick="play(4)"></button></td>
+<td><button class="cell" onclick="play(5)"></button></td>
+</tr>
+
+<tr>
+<td><button class="cell" onclick="play(6)"></button></td>
+<td><button class="cell" onclick="play(7)"></button></td>
+<td><button class="cell" onclick="play(8)"></button></td>
+</tr>
+
+</table>
+
+<br>
+
+<button onclick="resetGame()">Reset</button>
+
+<br>
+
+<button onclick="openPage('home')">Back</button>
+
+</div>
+
+
+<!-- PHOTOS -->
+
+<div id="photos" class="page">
+
+<h3>Our Memories 📷</h3>
+
+<div class="gallery">
+
+<img src="https://picsum.photos/100?1">
+<img src="https://picsum.photos/100?2">
+<img src="https://picsum.photos/100?3">
+
+</div>
+
+<button onclick="openPage('home')">Back</button>
+
+</div>
+
+
+<!-- MUSIC -->
+
+<div id="music" class="page">
+
+<h3>Our Song 🎵</h3>
+
+<audio controls>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<br>
+
+<button onclick="openPage('home')">Back</button>
+
+</div>
+
 </div>
 
 
 
 <script>
 
-/* floating hearts generator */
+/* floating hearts */
 
 for(let i=0;i<25;i++){
 
-let heart=document.createElement("div")
+let h=document.createElement("div")
+h.className="heart"
+h.innerHTML="❤️"
+h.style.left=Math.random()*100+"%"
+h.style.fontSize=15+Math.random()*25+"px"
+h.style.animationDuration=5+Math.random()*10+"s"
 
-heart.className="heart"
-
-heart.innerHTML="❤️"
-
-heart.style.left=Math.random()*100+"%"
-
-heart.style.animationDuration=5+Math.random()*10+"s"
-
-heart.style.fontSize=15+Math.random()*25+"px"
-
-document.querySelector(".hearts").appendChild(heart)
+document.querySelector(".hearts").appendChild(h)
 
 }
 
 
-/* page system */
+/* page navigation */
 
 function openPage(p){
 
@@ -326,6 +291,7 @@ document.querySelectorAll(".page").forEach(e=>e.style.display="none")
 document.getElementById(p).style.display="block"
 
 }
+
 
 function enter(){
 
@@ -341,19 +307,111 @@ document.getElementById("home").style.display="block"
 
 }
 
-/* simple chat */
+</script>
 
-function send(){
+
+
+<!-- FIREBASE -->
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, set }
+from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyB_17-XmHxGmGQc_lHuTHoHAK8oVIxJ6W0",
+authDomain: "my-poluuuu.firebaseapp.com",
+databaseURL: "https://my-poluuuu-default-rtdb.firebaseio.com/",
+projectId: "my-poluuuu",
+storageBucket: "my-poluuuu.firebasestorage.app",
+messagingSenderId: "1052824892709",
+appId: "1:1052824892709:web:7e4874adb805f9b5b456cc"
+};
+
+const app=initializeApp(firebaseConfig)
+const db=getDatabase(app)
+
+let room="love-room"
+
+
+/* chat */
+
+window.send=function(){
 
 let msg=document.getElementById("msg").value
 
 if(msg==="")return
 
-let box=document.getElementById("messages")
-
-box.innerHTML+="<p>"+msg+"</p>"
+push(ref(db,"rooms/"+room+"/chat"),{
+text:msg
+})
 
 document.getElementById("msg").value=""
+
+}
+
+
+onValue(ref(db,"rooms/"+room+"/chat"),snap=>{
+
+let box=document.getElementById("messages")
+
+box.innerHTML=""
+
+snap.forEach(d=>{
+box.innerHTML+="<p>"+d.val().text+"</p>"
+})
+
+})
+
+
+/* game */
+
+let board=["","","","","","","","",""]
+let turn="X"
+
+window.play=function(i){
+
+if(board[i]!="")return
+
+board[i]=turn
+
+turn=turn=="X"?"O":"X"
+
+set(ref(db,"rooms/"+room+"/game"),{
+board:board,
+turn:turn
+})
+
+}
+
+
+onValue(ref(db,"rooms/"+room+"/game"),snap=>{
+
+if(!snap.exists())return
+
+let data=snap.val()
+
+board=data.board
+
+turn=data.turn
+
+let cells=document.getElementsByClassName("cell")
+
+for(let i=0;i<9;i++)
+cells[i].innerText=board[i]
+
+})
+
+
+window.resetGame=function(){
+
+board=["","","","","","","","",""]
+
+set(ref(db,"rooms/"+room+"/game"),{
+board:board,
+turn:"X"
+})
 
 }
 
