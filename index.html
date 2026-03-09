@@ -5,32 +5,144 @@
 
 <style>
 
-body{
-font-family:Arial;
-background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-text-align:center;
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
 }
 
-.box{
-background:white;
-padding:30px;
-width:320px;
-margin:auto;
-margin-top:80px;
-border-radius:15px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+background:linear-gradient(120deg,#ff758c,#ff7eb3,#ffb199);
+}
+
+/* floating hearts */
+
+.hearts{
+position:absolute;
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+.heart{
+position:absolute;
+color:white;
+font-size:20px;
+animation:float 10s linear infinite;
+opacity:0.7;
+}
+
+@keyframes float{
+
+0%{
+transform:translateY(100vh);
+opacity:0;
+}
+
+50%{
+opacity:1;
+}
+
+100%{
+transform:translateY(-10vh);
+opacity:0;
+}
+
+}
+
+/* glass card */
+
+.card{
+
+position:relative;
+z-index:2;
+
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+border-radius:25px;
+
+padding:40px;
+width:350px;
+
+box-shadow:0 20px 50px rgba(0,0,0,0.3);
+
+color:white;
+text-align:center;
+
+animation:fade 1.5s ease;
+
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:scale(0.8);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+input{
+
+padding:12px;
+width:80%;
+border:none;
+border-radius:12px;
+
+margin-top:15px;
+
 }
 
 button{
-padding:10px 20px;
+
+margin-top:15px;
+
+padding:12px 25px;
+
 border:none;
-border-radius:10px;
+border-radius:12px;
+
 background:#ff4d6d;
+
 color:white;
+
+font-size:16px;
+
 cursor:pointer;
-margin:5px;
+
+transition:0.3s;
+
 }
+
+button:hover{
+
+transform:scale(1.1);
+background:#ff1e56;
+
+}
+
+/* menu */
+
+.menu button{
+
+display:block;
+width:200px;
+margin:10px auto;
+
+}
+
+/* game board */
 
 table{
 margin:auto;
@@ -38,209 +150,210 @@ margin-top:20px;
 }
 
 .cell{
+
 width:80px;
 height:80px;
+
 font-size:30px;
+
+border-radius:10px;
+
+background:white;
+
+color:black;
+
+transition:0.2s;
+
 }
 
-#game{
+.cell:hover{
+
+background:#ffe5ec;
+
+}
+
+/* chat */
+
+#messages{
+
+height:150px;
+
+overflow:auto;
+
+background:rgba(255,255,255,0.2);
+
+border-radius:10px;
+
+padding:10px;
+
+margin-bottom:10px;
+
+}
+
+.page{
 display:none;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="box" id="login">
+<div class="hearts"></div>
 
-<h2>Our Secret Game ❤️</h2>
+<div class="card">
 
-<input id="room" placeholder="Enter love code">
+<!-- LOGIN -->
 
-<br><br>
+<div id="login">
 
-<button onclick="joinRoom()">Enter</button>
+<h2>Our Love Space ❤️</h2>
+
+<p>Enter our secret code</p>
+
+<input id="room">
+
+<br>
+
+<button onclick="enter()">Enter</button>
 
 </div>
 
 
-<div id="game">
+<!-- HOME -->
+
+<div id="home" class="page">
 
 <h2>Lokesh ❤️ GF</h2>
 
-<h3 id="status">Connecting...</h3>
+<div class="menu">
+
+<button onclick="openPage('game')">🎮 Play Game</button>
+
+<button onclick="openPage('chat')">💬 Chat</button>
+
+</div>
+
+</div>
+
+
+<!-- GAME -->
+
+<div id="game" class="page">
+
+<h3>Tic Tac Toe</h3>
 
 <table>
 
 <tr>
-<td><button class="cell" onclick="move(0)"></button></td>
-<td><button class="cell" onclick="move(1)"></button></td>
-<td><button class="cell" onclick="move(2)"></button></td>
+<td><button class="cell"></button></td>
+<td><button class="cell"></button></td>
+<td><button class="cell"></button></td>
 </tr>
 
 <tr>
-<td><button class="cell" onclick="move(3)"></button></td>
-<td><button class="cell" onclick="move(4)"></button></td>
-<td><button class="cell" onclick="move(5)"></button></td>
+<td><button class="cell"></button></td>
+<td><button class="cell"></button></td>
+<td><button class="cell"></button></td>
 </tr>
 
 <tr>
-<td><button class="cell" onclick="move(6)"></button></td>
-<td><button class="cell" onclick="move(7)"></button></td>
-<td><button class="cell" onclick="move(8)"></button></td>
+<td><button class="cell"></button></td>
+<td><button class="cell"></button></td>
+<td><button class="cell"></button></td>
 </tr>
 
 </table>
 
 <br>
 
-<button onclick="resetGame()">Reset ❤️</button>
+<button onclick="openPage('home')">Back</button>
+
+</div>
+
+
+<!-- CHAT -->
+
+<div id="chat" class="page">
+
+<h3>Love Chat 💬</h3>
+
+<div id="messages"></div>
+
+<input id="msg">
+
+<button onclick="send()">Send</button>
+
+<br>
+
+<button onclick="openPage('home')">Back</button>
+
+</div>
 
 </div>
 
 
 
-<script type="module">
+<script>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, doc, setDoc, updateDoc, onSnapshot } 
-from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+/* floating hearts generator */
 
-const firebaseConfig = {
-apiKey: "AIzaSyB_17-XmHxGmGQc_lHuTHoHAK8oVIxJ6W0",
-authDomain: "my-poluuuu.firebaseapp.com",
-projectId: "my-poluuuu",
-storageBucket: "my-poluuuu.firebasestorage.app",
-messagingSenderId: "1052824892709",
-appId: "1:1052824892709:web:7e4874adb805f9b5b456cc",
-measurementId: "G-T9P760QJEL"
-};
+for(let i=0;i<25;i++){
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let heart=document.createElement("div")
 
-let room=""
-let player=""
+heart.className="heart"
 
-window.joinRoom = async function(){
+heart.innerHTML="❤️"
 
-room=document.getElementById("room").value
+heart.style.left=Math.random()*100+"%"
+
+heart.style.animationDuration=5+Math.random()*10+"s"
+
+heart.style.fontSize=15+Math.random()*25+"px"
+
+document.querySelector(".hearts").appendChild(heart)
+
+}
+
+
+/* page system */
+
+function openPage(p){
+
+document.querySelectorAll(".page").forEach(e=>e.style.display="none")
+
+document.getElementById(p).style.display="block"
+
+}
+
+function enter(){
+
+let code=document.getElementById("room").value
+
+if(code.length>0){
 
 document.getElementById("login").style.display="none"
-document.getElementById("game").style.display="block"
 
-const ref=doc(db,"rooms",room)
-
-onSnapshot(ref,(snap)=>{
-
-if(!snap.exists()){
-
-setDoc(ref,{
-board:["","","","","","","","",""],
-turn:"X"
-})
-
-player="X"
-
-}
-else{
-
-player="O"
-
-}
-
-updateBoard()
-
-})
-
-}
-
-
-window.move = async function(i){
-
-const ref=doc(db,"rooms",room)
-
-onSnapshot(ref,(snap)=>{
-
-let data=snap.data()
-
-if(data.board[i]!=="" || data.turn!==player)
-return
-
-data.board[i]=player
-
-let next=player==="X"?"O":"X"
-
-updateDoc(ref,{
-board:data.board,
-turn:next
-})
-
-})
-
-}
-
-
-function updateBoard(){
-
-const ref=doc(db,"rooms",room)
-
-onSnapshot(ref,(snap)=>{
-
-let data=snap.data()
-
-let cells=document.getElementsByClassName("cell")
-
-for(let i=0;i<9;i++)
-cells[i].innerText=data.board[i]
-
-document.getElementById("status").innerText="Turn: "+data.turn
-
-checkWinner(data.board)
-
-})
-
-}
-
-
-function checkWinner(b){
-
-let w=[
-[0,1,2],
-[3,4,5],
-[6,7,8],
-[0,3,6],
-[1,4,7],
-[2,5,8],
-[0,4,8],
-[2,4,6]
-]
-
-for(let a of w){
-
-if(b[a[0]]!=="" &&
-b[a[0]]===b[a[1]] &&
-b[a[1]]===b[a[2]]){
-
-document.getElementById("status").innerText=b[a[0]]+" Wins ❤️"
+document.getElementById("home").style.display="block"
 
 }
 
 }
 
-}
+/* simple chat */
 
+function send(){
 
-window.resetGame = async function(){
+let msg=document.getElementById("msg").value
 
-const ref=doc(db,"rooms",room)
+if(msg==="")return
 
-updateDoc(ref,{
-board:["","","","","","","","",""],
-turn:"X"
-})
+let box=document.getElementById("messages")
+
+box.innerHTML+="<p>"+msg+"</p>"
+
+document.getElementById("msg").value=""
 
 }
 
