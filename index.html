@@ -2,107 +2,103 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Our Love Chat ❤️</title>
+<title>Our Love Space 💖</title>
 
 <style>
 
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
+font-family:sans-serif;
+background:linear-gradient(135deg,#ff4e8a,#ff9ecb);
 height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#ff4e8a,#ff9ecb,#ffdde1);
-overflow:hidden;
-}
-
-/* floating hearts */
-
-.heart{
-position:absolute;
 color:white;
-font-size:20px;
-animation:float 10s infinite;
-opacity:0.7;
 }
-
-@keyframes float{
-0%{transform:translateY(100vh);}
-100%{transform:translateY(-10vh);}
-}
-
-/* chat container */
 
 #app{
-width:360px;
-height:520px;
-backdrop-filter:blur(15px);
+width:380px;
+height:600px;
 background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
 border-radius:20px;
-box-shadow:0 20px 50px rgba(0,0,0,0.3);
+padding:15px;
 display:flex;
 flex-direction:column;
-padding:20px;
-color:white;
 }
 
-#title{
+h2{
 text-align:center;
-font-size:22px;
-margin-bottom:10px;
+margin:5px;
 }
 
-/* messages */
+/* chat */
 
 #messages{
 flex:1;
 overflow-y:auto;
-padding:10px;
 }
 
 .msg{
 background:rgba(255,255,255,0.3);
-margin:8px 0;
-padding:10px;
-border-radius:12px;
-backdrop-filter:blur(10px);
-animation:fadeIn 0.4s;
+margin:6px;
+padding:8px;
+border-radius:10px;
 }
 
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(10px);}
-to{opacity:1;}
+img{
+max-width:120px;
+border-radius:10px;
 }
 
-/* input area */
+/* input */
 
-#inputArea{
+#chatControls{
 display:flex;
-gap:10px;
+gap:5px;
 }
 
 input{
 flex:1;
-padding:10px;
-border:none;
+padding:8px;
 border-radius:10px;
-outline:none;
+border:none;
 }
 
 button{
-background:#ff4e8a;
 border:none;
+padding:8px 10px;
+border-radius:8px;
+background:#ff2f73;
 color:white;
-padding:10px 16px;
-border-radius:10px;
 cursor:pointer;
-transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.1);
-background:#ff2f73;
+/* game */
+
+#game{
+margin-top:10px;
+text-align:center;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:5px;
+margin-top:10px;
+}
+
+.cell{
+height:60px;
+background:white;
+color:black;
+font-size:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+border-radius:8px;
 }
 
 </style>
@@ -112,75 +108,229 @@ background:#ff2f73;
 
 <div id="app">
 
-<div id="title">💖 Our Love Chat 💖</div>
+<div id="login">
+<h2>💖 Enter Love Passcode</h2>
+<input id="pass" placeholder="Passcode">
+<button onclick="enter()">Enter</button>
+</div>
+
+<div id="main" style="display:none">
+
+<h2>Our Love Chat</h2>
 
 <div id="messages"></div>
 
-<div id="inputArea">
-<input id="msgInput" placeholder="Type something sweet...">
+<div id="chatControls">
+<input id="msgInput">
 <button onclick="sendMsg()">Send</button>
+<input type="file" id="photo" onchange="sendPhoto()" style="width:80px">
 </div>
+
+<div>
+<button onclick="addEmoji('❤️')">❤️</button>
+<button onclick="addEmoji('😘')">😘</button>
+<button onclick="addEmoji('😍')">😍</button>
+<button onclick="addEmoji('🥰')">🥰</button>
+</div>
+
+<div id="game">
+
+<h2>Tic Tac Toe</h2>
+
+<button onclick="ready()">Ready</button>
+<div id="status"></div>
+
+<div class="grid" id="board"></div>
+
+<button onclick="resetGame()">Reset</button>
 
 </div>
 
-<!-- floating hearts -->
-<script>
-for(let i=0;i<20;i++){
-let heart=document.createElement("div")
-heart.className="heart"
-heart.innerHTML="❤"
-heart.style.left=Math.random()*100+"vw"
-heart.style.animationDuration=(5+Math.random()*5)+"s"
-document.body.appendChild(heart)
-}
-</script>
+</div>
+
+</div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, set, onValue } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyB_17-XmHxGmGQc_lHuTHoHAK8oVIxJ6W0",
-authDomain: "my-poluuuu.firebaseapp.com",
-databaseURL: "https://my-poluuuu-default-rtdb.asia-southeast1.firebasedatabase.app",
-projectId: "my-poluuuu",
-storageBucket: "my-poluuuu.firebasestorage.app",
-messagingSenderId: "1052824892709",
-appId: "1:1052824892709:web:7e4874adb805f9b5b456cc"
+
+apiKey:"AIzaSyB_17-XmHxGmGQc_lHuTHoHAK8oVIxJ6W0",
+authDomain:"my-poluuuu.firebaseapp.com",
+databaseURL:"https://my-poluuuu-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId:"my-poluuuu"
+
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const chatRef = ref(db,"lovechat/messages");
+const chatRef = ref(db,"chat/messages");
+const gameRef = ref(db,"game");
+
+let player="";
+let board=["","","","","","","","",""];
+
+function enter(){
+
+if(document.getElementById("pass").value==="1234"){
+
+document.getElementById("login").style.display="none"
+document.getElementById("main").style.display="flex"
+
+}
+
+}
+
+/* CHAT */
 
 window.sendMsg=function(){
 
-let input=document.getElementById("msgInput")
-let text=input.value
+let text=document.getElementById("msgInput").value
 
-if(text==="") return
+push(chatRef,{type:"text",text})
 
-push(chatRef,{
-message:text,
-time:Date.now()
-})
+document.getElementById("msgInput").value=""
 
-input.value=""
 }
 
-onChildAdded(chatRef,(data)=>{
+window.sendPhoto=function(){
 
-let msg=data.val().message
+let file=document.getElementById("photo").files[0]
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+push(chatRef,{type:"img",url:reader.result})
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+window.addEmoji=function(e){
+
+document.getElementById("msgInput").value+=e
+
+}
+
+onChildAdded(chatRef,(d)=>{
+
+let data=d.val()
 
 let div=document.createElement("div")
 div.className="msg"
-div.innerText=msg
+
+if(data.type==="text") div.innerText=data.text
+
+if(data.type==="img"){
+
+let img=document.createElement("img")
+img.src=data.url
+div.appendChild(img)
+
+}
 
 document.getElementById("messages").appendChild(div)
 
 })
+
+/* GAME */
+
+let boardDiv=document.getElementById("board")
+
+for(let i=0;i<9;i++){
+
+let cell=document.createElement("div")
+cell.className="cell"
+
+cell.onclick=()=>move(i)
+
+boardDiv.appendChild(cell)
+
+}
+
+window.ready=function(){
+
+set(ref(db,"game/ready/"+Math.random()),true)
+
+}
+
+onValue(ref(db,"game/ready"),(snap)=>{
+
+if(snap.exists()){
+
+let count=Object.keys(snap.val()).length
+
+if(count>=2){
+
+document.getElementById("status").innerText="Game started"
+
+player=Math.random()>0.5?"X":"O"
+
+}
+
+}
+
+})
+
+function move(i){
+
+if(board[i]!=="" || player==="") return
+
+board[i]=player
+
+set(ref(db,"game/board"),board)
+
+check()
+
+}
+
+onValue(ref(db,"game/board"),(snap)=>{
+
+if(!snap.exists()) return
+
+board=snap.val()
+
+let cells=document.querySelectorAll(".cell")
+
+cells.forEach((c,i)=>c.innerText=board[i])
+
+})
+
+function check(){
+
+let wins=[
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+]
+
+for(let w of wins){
+
+let [a,b,c]=w
+
+if(board[a] && board[a]==board[b] && board[a]==board[c]){
+
+alert(board[a]+" wins ❤️")
+
+}
+
+}
+
+}
+
+window.resetGame=function(){
+
+board=["","","","","","","","",""]
+
+set(ref(db,"game/board"),board)
+
+}
 
 </script>
 
