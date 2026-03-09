@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Our Love Space 💖</title>
+<title>Our Love App 💖</title>
 
 <style>
 
@@ -14,29 +14,27 @@ font-family:Segoe UI;
 body{
 margin:0;
 height:100vh;
-overflow:hidden;
-color:white;
 display:flex;
 justify-content:center;
 align-items:center;
+overflow:hidden;
+color:white;
 }
 
-/* animated gradient */
+/* animated gradient background */
 
 body::before{
 content:"";
 position:fixed;
-top:0;
-left:0;
 width:100%;
 height:100%;
 background:linear-gradient(270deg,#ff4e8a,#ff9ecb,#ff4e8a);
 background-size:600% 600%;
-animation:bgmove 15s ease infinite;
+animation:bg 14s ease infinite;
 z-index:-2;
 }
 
-@keyframes bgmove{
+@keyframes bg{
 0%{background-position:0% 50%}
 50%{background-position:100% 50%}
 100%{background-position:0% 50%}
@@ -47,7 +45,7 @@ z-index:-2;
 .heart{
 position:absolute;
 font-size:18px;
-opacity:0.6;
+opacity:.6;
 animation:float 10s linear infinite;
 }
 
@@ -56,13 +54,13 @@ animation:float 10s linear infinite;
 100%{transform:translateY(-10vh)}
 }
 
-/* container */
+/* app card */
 
 #app{
 width:380px;
 height:640px;
-backdrop-filter:blur(20px);
 background:rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
 border-radius:20px;
 padding:15px;
 display:flex;
@@ -70,27 +68,62 @@ flex-direction:column;
 box-shadow:0 20px 40px rgba(0,0,0,0.3);
 }
 
-/* titles */
+/* login */
 
-h2{
-text-align:center;
-margin:5px;
+#login{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+gap:15px;
+}
+
+input{
+padding:10px;
+border:none;
+border-radius:10px;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:10px;
+background:#ff2f73;
+color:white;
+cursor:pointer;
+transition:.2s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+/* main */
+
+#main{
+display:none;
+flex-direction:column;
+height:100%;
 }
 
 /* chat */
 
 #messages{
 flex:1;
-overflow-y:auto;
-padding:5px;
+background:rgba(255,255,255,.2);
+border-radius:10px;
+overflow:auto;
+padding:10px;
+margin-bottom:10px;
 }
 
 .msg{
-background:rgba(255,255,255,0.3);
+background:rgba(255,255,255,.4);
 padding:8px;
-margin:6px 0;
-border-radius:10px;
-animation:fade 0.4s;
+border-radius:8px;
+margin:5px 0;
+animation:fade .3s;
 }
 
 @keyframes fade{
@@ -99,7 +132,7 @@ to{opacity:1}
 }
 
 img{
-max-width:130px;
+max-width:120px;
 border-radius:10px;
 }
 
@@ -108,65 +141,37 @@ border-radius:10px;
 #controls{
 display:flex;
 gap:5px;
-margin-top:5px;
 }
 
-input{
+#controls input{
 flex:1;
-padding:8px;
-border-radius:10px;
-border:none;
-}
-
-button{
-border:none;
-padding:8px 10px;
-border-radius:8px;
-background:#ff2f73;
-color:white;
-cursor:pointer;
-transition:0.3s;
-}
-
-button:hover{
-transform:scale(1.1);
 }
 
 /* emojis */
 
 #emojis{
-margin-top:4px;
+margin-top:5px;
 }
 
 /* game */
 
-#game{
-margin-top:8px;
-text-align:center;
-}
-
-.grid{
+#board{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:6px;
+gap:8px;
 margin-top:10px;
 }
 
 .cell{
-height:65px;
+aspect-ratio:1;
 background:white;
 color:black;
-font-size:28px;
+border-radius:10px;
 display:flex;
-align-items:center;
 justify-content:center;
-border-radius:8px;
+align-items:center;
+font-size:28px;
 cursor:pointer;
-transition:0.2s;
-}
-
-.cell:hover{
-transform:scale(1.1);
 }
 
 </style>
@@ -176,40 +181,48 @@ transform:scale(1.1);
 
 <div id="app">
 
+<!-- LOGIN -->
+
 <div id="login">
+
 <h2>💖 Enter Password</h2>
+
 <input id="pass">
+
 <button onclick="enter()">Enter</button>
+
 </div>
 
-<div id="main" style="display:none">
+<!-- MAIN -->
 
-<h2>Love Chat 💬</h2>
+<div id="main">
+
+<h3>Love Chat 💬</h3>
 
 <div id="messages"></div>
 
 <div id="controls">
+
 <input id="msgInput">
+
 <button onclick="sendMsg()">Send</button>
-<input type="file" id="photo" onchange="sendPhoto()" style="width:90px">
+
+<input type="file" id="photo" onchange="sendPhoto()" style="width:80px">
+
 </div>
 
 <div id="emojis">
+
 <button onclick="emoji('❤️')">❤️</button>
 <button onclick="emoji('😘')">😘</button>
 <button onclick="emoji('😍')">😍</button>
 <button onclick="emoji('🥰')">🥰</button>
-<button onclick="emoji('😂')">😂</button>
+
 </div>
 
-<div id="game">
+<h3>Tic Tac Toe 🎮</h3>
 
-<h2>Tic-Tac-Toe</h2>
-
-<button onclick="ready()">Ready</button>
-<div id="status"></div>
-
-<div class="grid" id="board"></div>
+<div id="board"></div>
 
 <button onclick="resetGame()">Reset</button>
 
@@ -217,19 +230,22 @@ transform:scale(1.1);
 
 </div>
 
-</div>
-
 <script>
 
-/* floating hearts */
+/* hearts animation */
 
 for(let i=0;i<25;i++){
 
 let h=document.createElement("div")
+
 h.className="heart"
+
 h.innerHTML="❤️"
+
 h.style.left=Math.random()*100+"vw"
+
 h.style.animationDuration=(6+Math.random()*6)+"s"
+
 document.body.appendChild(h)
 
 }
@@ -253,20 +269,20 @@ projectId:"my-poluuuu"
 const app=initializeApp(firebaseConfig)
 const db=getDatabase(app)
 
-const chatRef=ref(db,"chat/messages")
-const boardRef=ref(db,"game/board")
+const chatRef=ref(db,"chat")
+const boardRef=ref(db,"board")
 
-let player=""
 let board=["","","","","","","","",""]
 
 window.enter=function(){
 
-if(document.getElementById("pass").value==="2412"){
+if(pass.value==="2412"){
 
 login.style.display="none"
+
 main.style.display="flex"
 
-}else alert("Wrong password")
+}
 
 }
 
@@ -274,11 +290,9 @@ main.style.display="flex"
 
 window.sendMsg=function(){
 
-let t=msgInput.value
+if(!msgInput.value) return
 
-if(!t) return
-
-push(chatRef,{type:"text",text:t})
+push(chatRef,{type:"text",text:msgInput.value})
 
 msgInput.value=""
 
@@ -287,6 +301,7 @@ msgInput.value=""
 window.sendPhoto=function(){
 
 let file=photo.files[0]
+
 let reader=new FileReader()
 
 reader.onload=()=>{
@@ -308,7 +323,9 @@ msgInput.value+=e
 onChildAdded(chatRef,d=>{
 
 let m=d.val()
+
 let div=document.createElement("div")
+
 div.className="msg"
 
 if(m.type==="text") div.innerText=m.text
@@ -316,7 +333,9 @@ if(m.type==="text") div.innerText=m.text
 if(m.type==="img"){
 
 let img=document.createElement("img")
+
 img.src=m.url
+
 div.appendChild(img)
 
 }
@@ -330,6 +349,7 @@ messages.appendChild(div)
 for(let i=0;i<9;i++){
 
 let cell=document.createElement("div")
+
 cell.className="cell"
 
 cell.onclick=()=>move(i)
@@ -340,22 +360,13 @@ document.getElementById("board").appendChild(cell)
 
 }
 
-window.ready=function(){
-
-player=Math.random()>0.5?"X":"O"
-status.innerText="You are "+player
-
-}
-
 function move(i){
 
-if(board[i]!==""||player==="") return
+if(board[i]) return
 
-board[i]=player
+board[i]="X"
 
 set(boardRef,board)
-
-check()
 
 }
 
@@ -370,24 +381,6 @@ let cells=document.querySelectorAll(".cell")
 cells.forEach((c,i)=>c.innerText=board[i])
 
 })
-
-function check(){
-
-let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
-
-for(let a of w){
-
-let[b,c,d]=a
-
-if(board[b]&&board[b]==board[c]&&board[b]==board[d]){
-
-alert(board[b]+" wins ❤️")
-
-}
-
-}
-
-}
 
 window.resetGame=function(){
 
